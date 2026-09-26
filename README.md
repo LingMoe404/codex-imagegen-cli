@@ -276,11 +276,19 @@ Requested dimensions are not guaranteed. The CLI reports actual dimensions and w
 
 ### Aspect ratios
 
-`--size` does not control the aspect ratio. The tested backend ignores the request's `size` field for framing and returns its own dimensions, so `--size 1024x1536` can come back as a square. What does control the ratio is the prompt: `--aspect-ratio W:H` appends explicit framing guidance to the prompt and then verifies the returned image against that ratio using `--size-policy`.
+`--size` does not control the aspect ratio. The tested backend ignores the request's `size` field for framing and returns its own dimensions, so `--size 1024x1536` can come back as a square. What does control the ratio is the prompt: `--aspect-ratio W:H` prepends explicit framing guidance to the prompt and then verifies the returned image against that ratio using `--size-policy`.
 
 ```bash
 codex-imagegen generate --prompt "A lighthouse at dusk" --out out.png --aspect-ratio 2:3
 codex-imagegen generate --prompt "A wide banner" --out banner.png --aspect-ratio 21:9
+```
+
+The framing instruction leads the prompt, so the ratio is set before the scene is described:
+
+```text
+The frame must be in 2:3 portrait format, taller than it is wide.
+
+A lighthouse at dusk
 ```
 
 Ratios are accepted between `1:3` and `3:1`. Live checks on the tested backend returned the requested ratio every time, with the frame size following the ratio at a roughly constant pixel budget:

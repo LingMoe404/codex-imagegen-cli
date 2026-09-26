@@ -1311,7 +1311,11 @@ def _prompt_with_aspect_ratio(prompt: str, args: argparse.Namespace) -> str:
 
 
 def _aspect_ratio_prompt(prompt: str, aspect_ratio: str) -> str:
-    """Ask for the ratio in words: the backend ignores the request's size field."""
+    """Ask for the ratio in words: the backend ignores the request's size field.
+
+    The instruction leads the prompt so the framing is set before the scene is
+    described, matching how the style-library templates order ratio constraints.
+    """
     value = _aspect_ratio_value(aspect_ratio)
     if value == 1:
         instruction = "The frame must be a 1:1 square."
@@ -1323,7 +1327,7 @@ def _aspect_ratio_prompt(prompt: str, aspect_ratio: str) -> str:
         instruction = (
             f"The frame must be in {aspect_ratio} portrait format, taller than it is wide."
         )
-    return f"{prompt}\n\n{instruction}"
+    return f"{instruction}\n\n{prompt}"
 
 
 def _aspect_ratio_mismatch(aspect_ratio: str, size: str) -> bool:

@@ -79,8 +79,15 @@ def test_aspect_ratio_is_mutually_exclusive_with_size(tmp_path, capsys):
 )
 def test_prompt_gains_ratio_orientation_guidance(ratio, expected):
     prompt = cli._aspect_ratio_prompt("A lighthouse.", ratio)
-    assert prompt.startswith("A lighthouse.")
     assert expected in prompt
+    assert "A lighthouse." in prompt
+
+
+def test_ratio_instruction_leads_the_prompt():
+    """Framing leads the scene, matching the style-library template ordering."""
+    prompt = cli._aspect_ratio_prompt("A lighthouse.", "16:9")
+    assert prompt.startswith("The frame must be")
+    assert prompt.index("The frame must be") < prompt.index("A lighthouse.")
 
 
 def test_prompt_ratio_guidance_survives_an_empty_prompt():
