@@ -296,7 +296,7 @@ Ratios are accepted between `1:3` and `3:1`. Live checks on the tested backend r
 | `21:9` | `1916x821` | 2.334 |
 | `3:1` | `2172x724` | 3.000 |
 
-Requests beyond 3:1 are clamped by the backend to roughly 3:1, so `--aspect-ratio 4:1` will be reported as a mismatch. Because the exact returned size is chosen by the backend, treat `--aspect-ratio` as a way to get the framing right, not as a way to pin exact pixels; crop or pad afterwards if a fixed pixel size is required. The CLI never silently resizes or crops the returned image to hide a mismatch.
+Requests beyond 3:1 are rejected locally, because the backend clamps them to roughly 3:1 (a live `4:1` request came back at `2172x724`) and would otherwise surface as a mismatch only after spending usage. Because the exact returned size is chosen by the backend, treat `--aspect-ratio` as a way to get the framing right, not as a way to pin exact pixels; crop or pad afterwards if a fixed pixel size is required. The CLI never silently resizes or crops the returned image to hide a mismatch.
 
 `n` is handled by the CLI by running one hosted image request per output path.
 For edit jobs, repeated outputs may wait for the per-minute input-image quota window before retrying; if the bucket stays full, retries back off progressively.
